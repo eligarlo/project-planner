@@ -4,7 +4,9 @@
       <h3 @click="toogleDetails">{{ project.title }}</h3>
       <div class="icons">
         <span class="material-icons"> edit </span>
-        <span class="material-icons"> delete </span>
+        <span @click="deleteProject" class="material-icons delete">
+          delete
+        </span>
         <span class="material-icons"> done </span>
       </div>
     </div>
@@ -22,11 +24,17 @@ export default {
   data() {
     return {
       showDetails: false,
+      uri: 'http://localhost:3000/projects/' + this.project.id,
     }
   },
   methods: {
     toogleDetails() {
       this.showDetails = !this.showDetails
+    },
+    deleteProject() {
+      fetch(this.uri, { method: 'DELETE' })
+        .then(() => this.$emit('deleteProject', this.project.id))
+        .catch((err) => console.log(err))
     },
   },
 }
@@ -62,5 +70,9 @@ h3 {
 
 .material-icons:hover {
   color: #777;
+}
+
+.material-icons.delete:hover {
+  color: #c70000;
 }
 </style>
